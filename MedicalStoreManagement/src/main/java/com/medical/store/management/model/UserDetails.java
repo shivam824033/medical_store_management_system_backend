@@ -3,37 +3,19 @@
  */
 package com.medical.store.management.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
 /**
  * @author Shivam jaiswal
- *
+ * 25-Aug-2024
  */
-
-
-@Entity
-@Table(name = "USERS")
-public class UserInfo {
+public class UserDetails {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "userId")
     private long userId;
     
     private String username;
     
     private String email;
     
-    private String password;
-    
     private String roles;
-    
-    private String secretKey;
     
     private String accountStatus;
     
@@ -41,9 +23,20 @@ public class UserInfo {
     
     private String address;
     
+	public UserDetails() {}
 
-	public UserInfo() {}
-
+	
+	public UserDetails(long userId, String username, String email, String roles, String accountStatus, String storeName,
+			String address) {
+		super();
+		this.userId = userId;
+		this.username = username;
+		this.email = email;
+		this.roles = roles;
+		this.accountStatus = accountStatus;
+		this.storeName = storeName;
+		this.address = address;
+	}
 
 	public long getUserId() {
 		return userId;
@@ -69,14 +62,6 @@ public class UserInfo {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getRoles() {
 		return roles;
 	}
@@ -85,20 +70,12 @@ public class UserInfo {
 		this.roles = roles;
 	}
 
-	public String getSecretKey() {
-		return secretKey;
-	}
-
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
-
 	public String getAccountStatus() {
 		return accountStatus;
 	}
 
-	public void setAccountStatus(String isActive) {
-		this.accountStatus = isActive;
+	public void setAccountStatus(String accountStatus) {
+		this.accountStatus = accountStatus;
 	}
 
 	public String getStoreName() {
@@ -116,6 +93,5 @@ public class UserInfo {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-    
+	  
 }
