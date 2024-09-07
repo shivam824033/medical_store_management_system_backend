@@ -3,18 +3,21 @@
  */
 package com.medical.store.management.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author Shivam jaiswal 24-Aug-2024
  */
 
 public class LoginResponse {
 
-	@JsonProperty("access_token")
 	private String accessToken;
-	@JsonProperty("refresh_token")
+
 	private String refreshToken;
+	
+	private String errorMessage;
+	
+	private int statusCode;
+	
+	private Object response;
 	
 	
 	public String getAccessToken() {
@@ -29,7 +32,24 @@ public class LoginResponse {
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
 	}
-	
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	public int getStatusCode() {
+		return statusCode;
+	}
+	public void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
+	}
+	public Object getResponse() {
+		return response;
+	}
+	public void setResponse(Object response) {
+		this.response = response;
+	}
 	
 
 }

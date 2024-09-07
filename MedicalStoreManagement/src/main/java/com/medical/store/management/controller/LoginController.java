@@ -4,19 +4,15 @@
 package com.medical.store.management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.store.management.model.LoginRequest;
 import com.medical.store.management.model.UserInfo;
-import com.medical.store.management.repository.UserInfoRepo;
-import com.medical.store.management.security.config.JwtTokenUtility;
 import com.medical.store.management.services.LoginService;
 
 /**
@@ -25,10 +21,8 @@ import com.medical.store.management.services.LoginService;
  */
 
 @RestController
+@RequestMapping("/api/auth")
 public class LoginController {
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -36,15 +30,16 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	
-	@PostMapping("/api/auth/login")
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping("/login")
 	public Object AuthenticateAndGetToken(@RequestBody LoginRequest loginRequest){
 	    	
 	    return  loginService.getLogin(loginRequest);   
 
 	}
 	
-	@PostMapping("/api/auth/signUp")
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping("/signUp")
 	public Object signUp(@RequestBody UserInfo userInfo) {
 		
 		userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
