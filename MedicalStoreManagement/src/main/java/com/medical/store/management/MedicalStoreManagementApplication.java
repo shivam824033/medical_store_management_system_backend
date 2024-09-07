@@ -36,12 +36,22 @@ public class MedicalStoreManagementApplication implements CommandLineRunner {
 		user.setUsername("Shivam");
 		user.setRoles("OWNER");
 		user.setEmail("shivam@gmail.com");
-		user.setPassword(passwordEncoder.encode("Pass@1234"));
+		user.setPassword(passwordEncoder.encode("Shivam@123"));
 		user.setAccountStatus("Active");
 		user.setSecretKey(keyService.generateSecretKey(user).getSecretKey());
 		
-		LoginResponse res = loginService.registerNewUser(user);	
-
+		LoginResponse userRes = loginService.registerNewUser(user);	
+		
+		UserInfo seller = new UserInfo();
+		
+		seller.setUsername("Shubham");
+		seller.setRoles("SELLER");
+		seller.setEmail("shubham@gmail.com");
+		seller.setPassword(passwordEncoder.encode("Shubham@1234"));
+		seller.setAccountStatus("Active");
+		seller.setSecretKey(keyService.generateSecretKey(seller).getSecretKey());
+		
+		LoginResponse sellerRes = loginService.registerNewUser(seller);	
 		
 	}
 

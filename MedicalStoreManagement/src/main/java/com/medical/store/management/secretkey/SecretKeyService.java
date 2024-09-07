@@ -3,7 +3,6 @@
  */
 package com.medical.store.management.secretkey;
 
-import java.rmi.server.UID;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,6 +53,10 @@ public class SecretKeyService {
 
 	public void updateSecretKeyStatus(UserInfo user) {
 
+		if(user.getRoles()=="PUBLIC") {
+			return;
+		}
+		
 		Optional<SecretKey> keyObj = secretKeyRepo.findBySecretKey(user.getSecretKey());
 		keyObj.get().setUserId(user.getUserId());
 		keyObj.get().setUsername(user.getUsername());
@@ -66,6 +69,10 @@ public class SecretKeyService {
 
 	public boolean validSecretKey(UserInfo user) {
 
+		if(user.getRoles()=="PUBLIC") {
+			return true;
+		}
+		
 		Optional<SecretKey> keyObj = secretKeyRepo.findBySecretKey(user.getSecretKey());
 
 		if (!keyObj.isEmpty()) {
