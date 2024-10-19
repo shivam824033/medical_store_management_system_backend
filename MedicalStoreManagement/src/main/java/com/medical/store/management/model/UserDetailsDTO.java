@@ -4,13 +4,10 @@
 package com.medical.store.management.model;
 
 /**
- * @author Shivam jaiswal
- *
+ * 
  */
+public class UserDetailsDTO {
 
-
-public class UserInfo {
-	
 	private long userId;
 
 	private String username;
@@ -26,6 +23,8 @@ public class UserInfo {
 	private String gender;
 	
 	private String roles;
+
+	private String password;
 	
 	private long storeId;
 	
@@ -43,6 +42,8 @@ public class UserInfo {
 	
 	private String country;
 	
+	private String secretKey;
+
 	private String accountStatus;
 
 	public long getUserId() {
@@ -109,6 +110,14 @@ public class UserInfo {
 		this.roles = roles;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public long getStoreId() {
 		return storeId;
 	}
@@ -173,6 +182,14 @@ public class UserInfo {
 		this.country = country;
 	}
 
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+
 	public String getAccountStatus() {
 		return accountStatus;
 	}
@@ -180,5 +197,6 @@ public class UserInfo {
 	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
 	}
-	
+
+
 }

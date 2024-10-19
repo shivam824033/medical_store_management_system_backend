@@ -18,29 +18,28 @@ import com.medical.store.management.secretkey.SecretKeyService;
 import com.medical.store.management.security.config.JwtTokenUtility;
 
 /**
- * @author Shivam jaiswal
- * 25-Aug-2024
+ * @author Shivam jaiswal 25-Aug-2024
  */
 
 @RestController
 @RequestMapping("/api/owner")
 public class OwnerController {
-	
+
 	@Autowired
 	private SecretKeyService keyService;
-	
-    @Autowired
-    private JwtTokenUtility jwtService;
-	
+
+	@Autowired
+	private JwtTokenUtility jwtService;
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/generatekey")
-	public Object generateSecretKey( @RequestHeader("Authorization") String reqHeader) {
-	
+	public Object generateSecretKey(@RequestHeader("Authorization") String reqHeader) {
+
 		System.out.print("key token : " + reqHeader);
-	UserInfo user = jwtService.extractUserInfoFromJWT(reqHeader);
-		
-	   return keyService.generateSecretKey(user);
-	   
+		UserInfo user = jwtService.extractUserInfoFromJWT(reqHeader);
+
+		return keyService.generateSecretKey(user);
+
 	}
 
 }

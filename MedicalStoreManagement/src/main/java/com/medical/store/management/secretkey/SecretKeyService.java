@@ -4,12 +4,12 @@
 package com.medical.store.management.secretkey;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.medical.store.management.model.UserDetailsDTO;
 import com.medical.store.management.model.UserInfo;
 
 /**
@@ -19,8 +19,11 @@ import com.medical.store.management.model.UserInfo;
 @Service
 public class SecretKeyService {
 
+//	@Autowired
+//	private SecretKeyRepository secretKeyRepo;
+	
 	@Autowired
-	private SecretKeyRepository secretKeyRepo;
+	private SecretKeyDAO secretKeyDAO;
 
 	public SecretKeyResponse generateSecretKey(UserInfo user) {
 
@@ -37,7 +40,7 @@ public class SecretKeyService {
 			secretkeyObj.setUpdatedDate(null);
 			secretkeyObj.setUpdatedBy(0);
 
-			secretKeyRepo.save(secretkeyObj);
+			secretKeyDAO.insertSecretKeyDetails(secretkeyObj);
 
 			res.setSecretKey(key);
 			res.setStatusCode(200);
@@ -51,32 +54,35 @@ public class SecretKeyService {
 
 	}
 
-	public void updateSecretKeyStatus(UserInfo user) {
+	public void updateSecretKeyStatus(UserDetailsDTO user) {
 
-		if(user.getRoles()=="PUBLIC") {
+		if(user.getRoles().equalsIgnoreCase("PUBLIC")) {
 			return;
 		}
 		
-		Optional<SecretKey> keyObj = secretKeyRepo.findBySecretKey(user.getSecretKey());
-		keyObj.get().setUserId(user.getUserId());
-		keyObj.get().setUsername(user.getUsername());
-		keyObj.get().setKeyStatus("USED");
-		keyObj.get().setUpdatedDate(new Date());
-		keyObj.get().setUpdatedBy(user.getUserId());
-		secretKeyRepo.save(keyObj.get());
+		SecretKey keyObj = secretKeyDAO.findBySecretKey(user.getSecretKey());
+		if(keyObj.getSecretId()!=0) {
+			keyObj.setUserId(user.getUserId());
+			keyObj.setUsername(user.getUsername());
+			keyObj.setKeyStatus("USED");
+			keyObj.setUpdatedDate(new Date());
+			keyObj.setUpdatedBy(user.getUserId());
+			secretKeyDAO.updateSecretKeyDetails(keyObj);
+		}
+
 
 	}
 
-	public boolean validSecretKey(UserInfo user) {
+	public boolean validSecretKey(UserDetailsDTO user) {
 
-		if(user.getRoles()=="PUBLIC") {
+		if(user.getRoles().equalsIgnoreCase("PUBLIC")) {
 			return true;
 		}
 		
-		Optional<SecretKey> keyObj = secretKeyRepo.findBySecretKey(user.getSecretKey());
+		SecretKey keyObj = secretKeyDAO.findBySecretKey(user.getSecretKey());
 
-		if (!keyObj.isEmpty()) {
-			if (keyObj.get().getKeyStatus().equalsIgnoreCase("NEW")) {
+		if (keyObj!=null) {  
+			if (keyObj.getKeyStatus().equalsIgnoreCase("NEW")) {
 				return true;
 			}
 		}

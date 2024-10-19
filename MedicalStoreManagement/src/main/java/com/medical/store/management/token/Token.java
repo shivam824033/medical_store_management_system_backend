@@ -20,18 +20,12 @@ import lombok.NoArgsConstructor;
  */
 
 
-@Entity
 public class Token {
 	
-	  @Id
-	  @GeneratedValue
 	  public Integer tokenId;
-
-	  @Column(unique = true)
 	  public String token;
 
-	  @Enumerated(EnumType.STRING)
-	  public TokenType tokenType = TokenType.BEARER;
+	  public String tokenType = "BEARER";
 
 	  public boolean revoked;
 
@@ -55,11 +49,11 @@ public class Token {
 		this.token = token;
 	}
 
-	public TokenType getTokenType() {
+	public String getTokenType() {
 		return tokenType;
 	}
 
-	public void setTokenType(TokenType tokenType) {
+	public void setTokenType(String tokenType) {
 		this.tokenType = tokenType;
 	}
 

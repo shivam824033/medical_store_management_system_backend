@@ -55,7 +55,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable).headers().frameOptions().disable().and()
                 .authorizeHttpRequests(req -> 
-                req.requestMatchers("/api/auth/**", "/h2/**").permitAll()
+                req.requestMatchers("/api/auth/**", "/api/public/**", "/h2/**").permitAll()
                 .requestMatchers("/api/owner/**").hasAuthority("OWNER")
                 .requestMatchers("/api/seller/**").hasAuthority("SELLER")
                 .anyRequest().authenticated()

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.store.management.model.LoginRequest;
+import com.medical.store.management.model.UserDetailsDTO;
 import com.medical.store.management.model.UserInfo;
 import com.medical.store.management.services.LoginService;
 
@@ -40,7 +41,7 @@ public class LoginController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/signUp")
-	public Object signUp(@RequestBody UserInfo userInfo) {
+	public Object signUp(@RequestBody UserDetailsDTO userInfo) {
 		
 		userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
 		

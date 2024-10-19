@@ -13,11 +13,8 @@ import jakarta.persistence.Id;
  * @author Shivam jaiswal 25-Aug-2024
  */
 
-@Entity
-public class SecretKey {
-
-	@Id
-	@GeneratedValue
+public class SecretKey{
+	
 	private long secretId;
 
 	private String secretKey;

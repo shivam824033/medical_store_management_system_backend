@@ -14,9 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.medical.store.management.dao.UserDetailsDAO;
 import com.medical.store.management.model.UserInfo;
-import com.medical.store.management.repository.UserInfoRepo;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,7 +32,7 @@ public class JwtTokenUtility {
 	public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
 	@Autowired
-	private UserInfoRepo userRepo;
+	private UserDetailsDAO userDetailsDAO;
 	
 	@Value("${application.security.jwt.secret-key}")
 	private String secretKey;
@@ -47,7 +46,7 @@ public class JwtTokenUtility {
 		String jwtToken = jwtHeader.substring(7);
 		String username = extractUsername(jwtToken);
 		
-		return userRepo.findByUsername(username).get();
+		return userDetailsDAO.findByUserName(username);
 	}
 
 	public String extractUsername(String token) {

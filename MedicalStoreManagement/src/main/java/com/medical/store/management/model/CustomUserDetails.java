@@ -22,7 +22,7 @@ public class CustomUserDetails implements UserDetails{
     private String password;
     Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(UserInfo byUsername) {
+    public CustomUserDetails(UserDetailsDTO byUsername) {
         this.username = byUsername.getUsername();
         this.password= byUsername.getPassword();
         List<GrantedAuthority> auths = new ArrayList<>();

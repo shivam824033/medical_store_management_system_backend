@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.medical.store.management.services.UserDetailsServiceImpl;
-import com.medical.store.management.token.TokenRepository;
+import com.medical.store.management.token.Token;
+//import com.medical.store.management.token.TokenRepository;
+import com.medical.store.management.token.TokenDAO;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter  {
     private UserDetailsServiceImpl userDetailsServiceImpl;
     
 	@Autowired
-	private TokenRepository tokenRepository;
+	private TokenDAO tokenDAO;
     
     
     @Override
@@ -61,9 +63,11 @@ public class JwtAuthFilter extends OncePerRequestFilter  {
               username = jwtService.extractUsername(jwt);
               if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsServiceImpl.loadUserByUsername(username);
-                var isTokenValid = tokenRepository.findByToken(jwt)
-                    .map(t -> !t.isExpired() && !t.isRevoked())
-                    .orElse(false);
+                Token token = tokenDAO.findByToken(jwt);
+                boolean isTokenValid = false;
+                if(!token.isExpired() && !token.isRevoked()) {
+                	isTokenValid = true;
+                }
                 if (jwtService.validateToken(jwt, userDetails) && isTokenValid) {
                   UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                       userDetails,

@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.medical.store.management.dao.UserDetailsDAO;
 import com.medical.store.management.model.CustomUserDetails;
-import com.medical.store.management.model.UserInfo;
-import com.medical.store.management.repository.UserInfoRepo;
+import com.medical.store.management.model.UserDetailsDTO;
 
 /**
  * @author Shivam jaiswal
@@ -25,13 +25,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 	
-	 @Autowired
-	 private UserInfoRepo userRepository;
+	@Autowired
+	private UserDetailsDAO userDetailsDAO;
 	  
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.debug("Entering in loadUserByUsername Method...");
-        UserInfo user = userRepository.findByUsername(username).get();
+        UserDetailsDTO user = userDetailsDAO.loadByUserName(username);
         if(user == null){
             logger.error("Username not found: " + username);
             throw new UsernameNotFoundException("could not found user..!!");

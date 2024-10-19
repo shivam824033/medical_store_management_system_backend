@@ -1,42 +1,34 @@
-/**
- * 
- */
 package com.medical.store.management.model;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-/**
- * @author Shivam jaiswal
- * 01-Sep-2024
- */
-
-@Entity
-public class ProductDetails {
+public class PharmacyMasterProduct {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "productId")
 	private long productId;
 	private String batchNumber;
 	private String productName;
 	private String productDescription;
-	private String productCategory;
-	private int productPrice;
-	private int productQuantity;
+	private int productCategory;
+	private String productImage;
+	private Double productPerPrice;
+	private Double totalPoductPrice;
+	private int productStripCount;
+	private int productPerStripCount;
+	private int totalProductQuantity;
 	private Date productExpiryDate;
 	private Date createdDate;
-	private Date updatedDate;
+	private Date updatedDate;                                     
 	
 	private String username;
 	private long userId;
+	private long storeId;
 	
-	
+	public String getProductImage() {
+		return productImage;
+	}
+	public void setProductImage(String productImgae) {
+		this.productImage = productImgae;
+	}
 	public long getProductId() {
 		return productId;
 	}
@@ -61,23 +53,41 @@ public class ProductDetails {
 	public void setProductDescription(String productDescription) {
 		this.productDescription = productDescription;
 	}
-	public String getProductCategory() {
+	public int getProductCategory() {
 		return productCategory;
 	}
-	public void setProductCategory(String productCategory) {
+	public void setProductCategory(int productCategory) {
 		this.productCategory = productCategory;
 	}
-	public int getProductPrice() {
-		return productPrice;
+	public Double getProductPerPrice() {
+		return productPerPrice;
 	}
-	public void setProductPrice(int productPrice) {
-		this.productPrice = productPrice;
+	public void setProductPerPrice(Double productPerPrice) {
+		this.productPerPrice = productPerPrice;
 	}
-	public int getProductQuantity() {
-		return productQuantity;
+	public Double getTotalPoductPrice() {
+		return totalPoductPrice;
 	}
-	public void setProductQuantity(int productQuantity) {
-		this.productQuantity = productQuantity;
+	public void setTotalPoductPrice(Double totalPoductPrice) {
+		this.totalPoductPrice = totalPoductPrice;
+	}
+	public int getProductStripCount() {
+		return productStripCount;
+	}
+	public void setProductStripCount(int productStripCount) {
+		this.productStripCount = productStripCount;
+	}
+	public int getProductPerStripCount() {
+		return productPerStripCount;
+	}
+	public void setProductPerStripCount(int productPerStripCount) {
+		this.productPerStripCount = productPerStripCount;
+	}
+	public int getTotalProductQuantity() {
+		return totalProductQuantity;
+	}
+	public void setTotalProductQuantity(int totalProductQuantity) {
+		this.totalProductQuantity = totalProductQuantity;
 	}
 	public Date getProductExpiryDate() {
 		return productExpiryDate;
@@ -109,7 +119,11 @@ public class ProductDetails {
 	public void setUserId(long userId) {
 		this.userId = userId;
 	}
-	
-	
+	public long getStoreId() {
+		return storeId;
+	}
+	public void setStoreId(long storeId) {
+		this.storeId = storeId;
+	}
 
 }
