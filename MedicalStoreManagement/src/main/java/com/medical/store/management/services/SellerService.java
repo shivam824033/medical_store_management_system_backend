@@ -36,9 +36,15 @@ public class SellerService {
 			productDetails.setStoreId(user.getStoreId());
 			productDetails.setCreatedDate(new Date());
 
-			int count = sellerDAO.addProductDetails(productDetails);
+			if(sellerDAO.isBatchNumberPresent(productDetails.getBatchNumber(), user.getUserId())) {
+				//update product details
+				res.setResponse("product Updated succesfully");
+			} else {
+				int count = sellerDAO.addProductDetails(productDetails);
 
-			res.setResponse("product added successfully : " + count);
+				res.setResponse("product added successfully : " + count);
+			}
+			
 			res.setStatusCode(200);
 			return res;
 		}

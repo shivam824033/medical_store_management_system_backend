@@ -93,4 +93,10 @@ public class SellerDAOImpl implements SellerDAO {
 		return productList;
 	}
 
+	@Override
+	public boolean isBatchNumberPresent(String BatchNumber, long userId) {
+		int count = jdbcTemplate.queryForObject(SellerQueryConstants.IS_BATCH_NUMBER_PRESENT.toString(), Integer.class, new Object[] { BatchNumber, userId});
+		return count>0;
+	}
+
 }
