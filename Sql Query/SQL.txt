@@ -1,0 +1,241 @@
+-- Database: MedicalStoreManagement
+
+-- DROP DATABASE IF EXISTS "MedicalStoreManagement";
+
+CREATE DATABASE "MedicalStoreManagement"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_India.1252'
+    LC_CTYPE = 'English_India.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+
+-----------------------------------------------------
+
+-- SCHEMA: medical_store
+
+-- DROP SCHEMA IF EXISTS medical_store ;
+
+CREATE SCHEMA IF NOT EXISTS medical_store
+    AUTHORIZATION postgres;
+
+----------------------------------------------------------
+
+-- Table: medical_store.jwt_token
+
+-- DROP TABLE IF EXISTS medical_store.jwt_token;
+
+CREATE TABLE IF NOT EXISTS medical_store.jwt_token
+(
+    token_id numeric(500,0) NOT NULL,
+    token text COLLATE pg_catalog."default" NOT NULL,
+    token_type character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    revoked boolean NOT NULL,
+    expired boolean NOT NULL,
+    user_id numeric(10,0) NOT NULL,
+    CONSTRAINT jwt_token_pkey PRIMARY KEY (token_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.jwt_token
+    OWNER to postgres;
+
+
+-----------------------------------------------------------
+
+-- Table: medical_store.master_product
+
+-- DROP TABLE IF EXISTS medical_store.master_product;
+
+CREATE TABLE IF NOT EXISTS medical_store.master_product
+(
+    product_id numeric(10,0) NOT NULL,
+    product_name character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    product_description text COLLATE pg_catalog."default",
+    product_image text COLLATE pg_catalog."default",
+    category_id numeric(5,0) NOT NULL,
+    CONSTRAINT master_product_pkey PRIMARY KEY (product_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.master_product
+    OWNER to postgres;
+
+------------------------------------------------------------------
+
+-- Table: medical_store.pharmacy_product_details
+
+-- DROP TABLE IF EXISTS medical_store.pharmacy_product_details;
+
+CREATE TABLE IF NOT EXISTS medical_store.pharmacy_product_details
+(
+    product_id numeric(10,0) NOT NULL,
+    batch_number character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    product_name character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    product_descrption text COLLATE pg_catalog."default",
+    category_id numeric(5,0) NOT NULL,
+    product_image text COLLATE pg_catalog."default",
+    pre_product_price numeric(10,2),
+    total_price numeric(10,2),
+    strip_count numeric(10,0),
+    product_per_strip numeric(10,0),
+    total_product_quantity numeric(10,0),
+    expiry_date timestamp without time zone,
+    created_date timestamp without time zone,
+    updated_date timestamp without time zone,
+    username character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    user_id numeric(10,0) NOT NULL,
+    store_id numeric(10,0) NOT NULL,
+    CONSTRAINT pharmacy_product_details_pkey PRIMARY KEY (batch_number)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.pharmacy_product_details
+    OWNER to postgres;
+
+
+-----------------------------------------------------------------
+
+-- Table: medical_store.secret_key_details
+
+-- DROP TABLE IF EXISTS medical_store.secret_key_details;
+
+CREATE TABLE IF NOT EXISTS medical_store.secret_key_details
+(
+    secret_id numeric(10,0) NOT NULL,
+    secret_key character varying(500) COLLATE pg_catalog."default" NOT NULL,
+    created_date timestamp without time zone,
+    updated_date timestamp without time zone,
+    created_by numeric(10,0),
+    updated_by numeric(10,0),
+    user_id numeric(10,0),
+    username character varying(100) COLLATE pg_catalog."default",
+    key_status character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT secret_key_details_pkey PRIMARY KEY (secret_id, secret_key)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.secret_key_details
+    OWNER to postgres;
+
+---------------------------------------------------------------------
+
+-- Table: medical_store.user_details
+
+-- DROP TABLE IF EXISTS medical_store.user_details;
+
+CREATE TABLE IF NOT EXISTS medical_store.user_details
+(
+    user_id numeric(10,0) NOT NULL,
+    username character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    firstname character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    lastname character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    fullname character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    gender character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    roles character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    password text COLLATE pg_catalog."default" NOT NULL,
+    store_id numeric(20,0) NOT NULL,
+    store_name character varying(200) COLLATE pg_catalog."default",
+    address_line1 character varying(500) COLLATE pg_catalog."default",
+    address_line2 character varying(500) COLLATE pg_catalog."default",
+    pincode numeric(10,0),
+    district character varying(100) COLLATE pg_catalog."default",
+    state character varying(50) COLLATE pg_catalog."default",
+    country character varying(50) COLLATE pg_catalog."default",
+    secret_key character varying(500) COLLATE pg_catalog."default",
+    account_status character varying(10) COLLATE pg_catalog."default",
+    created_date timestamp without time zone,
+    CONSTRAINT user_details_pkey PRIMARY KEY (user_id, username, email, store_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.user_details
+    OWNER to postgres;
+
+-------------------------------------------------------------------------
+
+-- SEQUENCE: medical_store.product_id_seq
+
+-- DROP SEQUENCE IF EXISTS medical_store.product_id_seq;
+
+CREATE SEQUENCE IF NOT EXISTS medical_store.product_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9999999999
+    CACHE 1;
+
+ALTER SEQUENCE medical_store.product_id_seq
+    OWNED BY medical_store.master_product.product_id;
+
+ALTER SEQUENCE medical_store.product_id_seq
+    OWNER TO postgres;
+
+----------------------------------------------------------------------------
+
+-- SEQUENCE: medical_store.secret_key_seq
+
+-- DROP SEQUENCE IF EXISTS medical_store.secret_key_seq;
+
+CREATE SEQUENCE IF NOT EXISTS medical_store.secret_key_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 9999999999
+    CACHE 1;
+
+ALTER SEQUENCE medical_store.secret_key_seq
+    OWNED BY medical_store.secret_key_details.secret_id;
+
+ALTER SEQUENCE medical_store.secret_key_seq
+    OWNER TO postgres;
+
+-----------------------------------------------------------
+
+-- SEQUENCE: medical_store.token_seq
+
+-- DROP SEQUENCE IF EXISTS medical_store.token_seq;
+
+CREATE SEQUENCE IF NOT EXISTS medical_store.token_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999999999999
+    CACHE 1;
+
+ALTER SEQUENCE medical_store.token_seq
+    OWNED BY medical_store.jwt_token.token_id;
+
+ALTER SEQUENCE medical_store.token_seq
+    OWNER TO postgres;
+
+------------------------------------------------------------
+
+-- SEQUENCE: medical_store.user_details_user_id
+
+-- DROP SEQUENCE IF EXISTS medical_store.user_details_user_id;
+
+CREATE SEQUENCE IF NOT EXISTS medical_store.user_details_user_id
+    INCREMENT 1
+    START 10
+    MINVALUE 10
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE medical_store.user_details_user_id
+    OWNED BY medical_store.user_details.user_id;
+
+ALTER SEQUENCE medical_store.user_details_user_id
+    OWNER TO postgres;
+
+------------------------------------------------------------------
+
