@@ -161,7 +161,63 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS medical_store.user_details
     OWNER to postgres;
 
+
+------------------------------------------------------------------
+
+-- Table: medical_store.invoice_details
+
+-- DROP TABLE IF EXISTS medical_store.invoice_details;
+
+CREATE TABLE IF NOT EXISTS medical_store.invoice_details
+(
+    invoice_no bigint NOT NULL,
+    customer_name character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    address character varying(255) COLLATE pg_catalog."default",
+    mobile_no character varying(15) COLLATE pg_catalog."default",
+    email character varying(100) COLLATE pg_catalog."default",
+    total_discount_amt numeric(10,2) DEFAULT 0.00,
+    total_amt numeric(10,2) NOT NULL,
+    store_id integer NOT NULL,
+    user_id integer NOT NULL,
+    username character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    created_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT invoice_details_pkey PRIMARY KEY (invoice_no)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.invoice_details
+    OWNER to postgres;
+
 -------------------------------------------------------------------------
+
+-- Table: medical_store.invoice_product_details
+
+-- DROP TABLE IF EXISTS medical_store.invoice_product_details;
+
+CREATE TABLE IF NOT EXISTS medical_store.invoice_product_details
+(
+    invoice_no bigint NOT NULL,
+    product_name character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    product_desc character varying(255) COLLATE pg_catalog."default",
+    quantity integer NOT NULL DEFAULT 1,
+    mrp numeric(10,2) NOT NULL,
+    discount numeric(10,2) DEFAULT 0.00,
+    total_amt numeric(10,2) NOT NULL,
+    store_id integer NOT NULL,
+    user_id integer NOT NULL,
+    username character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    created_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS medical_store.invoice_product_details
+    OWNER to postgres;
+
+------------------------------------------------------------------------
 
 -- SEQUENCE: medical_store.product_id_seq
 
