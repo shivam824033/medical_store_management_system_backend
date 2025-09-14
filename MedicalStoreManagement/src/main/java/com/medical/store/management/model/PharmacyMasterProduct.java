@@ -4,17 +4,17 @@ import java.util.Date;
 
 public class PharmacyMasterProduct {
 	
-	private long productId;
+	private long productId = 0;
 	private String batchNumber;
 	private String productName;
 	private String productDescription;
-	private int productCategory;
+	private int productCategory = 0;
 	private String productImage;
-	private Double productPerPrice;
-	private Double totalPoductPrice;
-	private int productStripCount;
-	private int productPerStripCount;
-	private int totalProductQuantity;
+	private Double productPerPrice = 0.0;
+	private Double totalPoductPrice = 0.0;
+	private int productStripCount = 0;
+	private int productPerStripCount = 0;
+	private int totalProductQuantity =0;
 	private Date productExpiryDate;
 	private Date createdDate;
 	private Date updatedDate;                                     

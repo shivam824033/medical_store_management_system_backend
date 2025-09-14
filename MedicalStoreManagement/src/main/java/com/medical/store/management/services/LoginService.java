@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.medical.store.management.dao.UserDetailsDAO;
 import com.medical.store.management.model.LoginRequest;
@@ -19,6 +21,9 @@ import com.medical.store.management.secretkey.SecretKeyService;
 import com.medical.store.management.security.config.JwtTokenUtility;
 import com.medical.store.management.token.Token;
 import com.medical.store.management.token.TokenDAO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 /**
  * @author Shivam jaiswal 24-Aug-2024
@@ -64,6 +69,9 @@ public class LoginService {
 			res.setStatusCode(200);
 			
 			res.setResponse(user);
+			
+			setUserDetailsSession(user);
+			
 			return res;
 		} catch (Exception e) {
 			res.setErrorMessage("Either username or password is wrong");
@@ -146,6 +154,7 @@ public class LoginService {
 					res.setStatusCode(200);
 					userInfo = userDetailsDAO.findByUserName(userDetails.getUsername());
 					res.setResponse(userInfo);
+					setUserDetailsSession(userInfo);
 					return res;
 				} else {
 					res.setErrorMessage("Some error occured");
@@ -184,6 +193,15 @@ public class LoginService {
 		if (validUserTokens.isEmpty())
 			return;
 		tokenDAO.revokeAllUserTokens(userId);
+	}
+	
+	private void setUserDetailsSession(UserInfo userInfo) {
+        // Retrieve the current request and session from the thread context
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        HttpSession session = request.getSession(true); // create session if none exists
+
+        session.setAttribute("USER_DETAILS", userInfo);
 	}
 
 }

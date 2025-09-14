@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.medical.store.management.model.PharmacyMasterProduct;
 import com.medical.store.management.model.UserInfo;
 import com.medical.store.management.security.config.JwtTokenUtility;
+import com.medical.store.management.services.FileUploadService;
 import com.medical.store.management.services.SellerService;
 
 /**
@@ -31,6 +34,9 @@ public class SellerController {
 	
     @Autowired
     private JwtTokenUtility jwtService;
+    
+    @Autowired
+    private FileUploadService fileUploadService;
     
 	
 //    @CrossOrigin(origins = "http://localhost:4200")
@@ -63,5 +69,25 @@ public class SellerController {
 	   return sellerService.sellProduct(productsDetails, user);
 	   
 	}
+    
+    @PostMapping("/csv")
+    public String uploadCsv(@RequestParam("file") MultipartFile file) {
+        try {
+        	fileUploadService.processCsv(file);
+            return "CSV file processed successfully!";
+        } catch (Exception e) {
+            return "Error processing CSV: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/excel")
+    public String uploadExcel(@RequestParam("file") MultipartFile file) {
+        try {
+        	fileUploadService.processExcel(file);
+            return "Excel file processed successfully!";
+        } catch (Exception e) {
+            return "Error processing Excel: " + e.getMessage();
+        }
+    }
 
 }

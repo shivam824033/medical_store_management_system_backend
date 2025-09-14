@@ -14,5 +14,7 @@ public interface SellerDAO {
 	public List<MasterProduct> getMasterProduct(String searchKeyword);
 	
 	public boolean isBatchNumberPresent(String BatchNumber, long userId);
+	
+	public void saveProductFromFile(List<PharmacyMasterProduct> productDetails);
 
 }

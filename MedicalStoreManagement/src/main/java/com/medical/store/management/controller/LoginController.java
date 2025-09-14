@@ -31,7 +31,6 @@ public class LoginController {
 	@Autowired
 	private LoginService loginService;
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/login")
 	public Object AuthenticateAndGetToken(@RequestBody LoginRequest loginRequest){
 	    	
@@ -39,7 +38,6 @@ public class LoginController {
 
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/signUp")
 	public Object signUp(@RequestBody UserDetailsDTO userInfo) {
 		

@@ -23,7 +23,7 @@ public class PublicController {
 	@Autowired
 	private JwtTokenUtility jwtService;
 
-	@CrossOrigin(origins = "http://localhost:4200")
+	
 	@GetMapping("/getSellerProduct")
 	public Object findSellerProduct(@RequestParam("storeId") int storeId,
 			@RequestParam("keyword") String searchKeyword) {
@@ -35,7 +35,7 @@ public class PublicController {
 
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
+	
 	@GetMapping("/getMasterProduct")
 	public Object getMasterProduct(@RequestParam("keyword") String searchKeyword) {
 

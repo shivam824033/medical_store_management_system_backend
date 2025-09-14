@@ -86,7 +86,8 @@ public class JwtTokenUtility {
 	}
 
 	private String createToken(Map<String, Object> claims, String username, long jwtExpiration) {
-
+//		UserInfo user = userDetailsDAO.findByUserName(username);
+//		claims.put("USER_DETAILS", user);
 		return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
 				.signWith(getSignKey(), SignatureAlgorithm.HS256).compact();

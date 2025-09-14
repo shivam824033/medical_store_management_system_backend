@@ -1,5 +1,6 @@
 package com.medical.store.management.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,66 @@ public class SellerDAOImpl implements SellerDAO {
 						productDetails.getUserId(), productDetails.getStoreId() });
 		return count;
 	}
+
+	@Override
+	public void saveProductFromFile(List<PharmacyMasterProduct> productDetailsList) {
+	        // SQL query with ON CONFLICT clause for batch update/insert.
+	        // It has 17 parameters for the INSERT and 15 parameters for the UPDATE
+	        // portion, as `created_date` and the conflict keys are not updated.
+	        String sql = """
+	            INSERT INTO medical_store.pharmacy_product_details (
+	                product_id, batch_number, product_name, product_descrption, 
+	                category_id, product_image, pre_product_price, total_price, 
+	                strip_count, product_per_strip, total_product_quantity, 
+	                expiry_date, created_date, updated_date, username, user_id, store_id
+	            )
+	            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	            ON CONFLICT (batch_number, store_id) DO UPDATE SET
+	                product_id = EXCLUDED.product_id,
+	                product_name = EXCLUDED.product_name,
+	                product_descrption = EXCLUDED.product_descrption,
+	                category_id = EXCLUDED.category_id,
+	                product_image = EXCLUDED.product_image,
+	                pre_product_price = EXCLUDED.pre_product_price,
+	                total_price = EXCLUDED.total_price,
+	                strip_count = EXCLUDED.strip_count,
+	                product_per_strip = EXCLUDED.product_per_strip,
+	                total_product_quantity = EXCLUDED.total_product_quantity,
+	                expiry_date = EXCLUDED.expiry_date,
+	                updated_date = EXCLUDED.updated_date,
+	                username = EXCLUDED.username,
+	                user_id = EXCLUDED.user_id;
+	        """;
+
+	        int[][] count =  jdbcTemplate.batchUpdate(sql, productDetailsList, productDetailsList.size(),
+	            ( ps,  productDetails) -> {
+	                int i = 1;
+	                // Mapping the DTO fields to the PreparedStatement placeholders.
+	                // The order must exactly match the column order in the SQL query.
+	                
+	                // INSERT VALUES (17 parameters)
+	                ps.setLong(i++, productDetails.getProductId());
+	                ps.setString(i++, productDetails.getBatchNumber());
+	                ps.setString(i++, productDetails.getProductName());
+	                ps.setString(i++, productDetails.getProductDescription());
+	                ps.setInt(i++, productDetails.getProductCategory());
+	                ps.setString(i++, productDetails.getProductImage());
+	                ps.setDouble(i++, productDetails.getProductPerPrice());
+	                ps.setDouble(i++, productDetails.getTotalPoductPrice());
+	                ps.setInt(i++, productDetails.getProductStripCount());
+	                ps.setInt(i++, productDetails.getProductPerStripCount());
+	                ps.setInt(i++, productDetails.getTotalProductQuantity());
+	                ps.setDate(i++, new Date(productDetails.getProductExpiryDate().getTime()));
+	                ps.setDate(i++, new Date(productDetails.getCreatedDate().getTime()));
+	                ps.setDate(i++, new Date(productDetails.getUpdatedDate().getTime()));
+	                ps.setString(i++, productDetails.getUsername());
+	                ps.setLong(i++, productDetails.getUserId());
+	                ps.setLong(i, productDetails.getStoreId());
+	            });
+	        
+	        System.out.print("total product insert count : " + count);
+	    }
+
 
 	@Override
 	public List<PharmacyMasterProduct> findAllSellerProduct(int storeId, String searchKeyword) {
