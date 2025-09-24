@@ -3,7 +3,11 @@
  */
 package com.medical.store.management.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,6 +74,14 @@ public class SellerController {
 	   
 	}
     
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/finalizeBill")
+    public Object finalizeBill(@RequestHeader("Authorization") String reqHeader, @RequestBody List<Map<String, Object>> billItems) {
+        UserInfo user = jwtService.extractUserInfoFromJWT(reqHeader);
+        // Call a service to process the bill (update stock, save bill, etc.)
+        return sellerService.finalizeBill(billItems, user);
+    }
+    
     @PostMapping("/csv")
     public String uploadCsv(@RequestParam("file") MultipartFile file) {
         try {
@@ -88,6 +100,17 @@ public class SellerController {
         } catch (Exception e) {
             return "Error processing Excel: " + e.getMessage();
         }
+    }
+    
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/expiredProducts")
+    public ResponseEntity<?> getExpiredProducts(
+            @RequestHeader("Authorization") String reqHeader,
+            @RequestBody Map<String, String> payload) {
+        UserInfo user = jwtService.extractUserInfoFromJWT(reqHeader);
+        String date = payload.get("date");
+        List<Map<String, Object>> expiredProducts = sellerService.getExpiredProducts(user, date);
+        return ResponseEntity.ok(expiredProducts);
     }
 
 }

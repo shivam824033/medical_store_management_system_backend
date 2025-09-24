@@ -159,5 +159,26 @@ public class SellerDAOImpl implements SellerDAO {
 		int count = jdbcTemplate.queryForObject(SellerQueryConstants.IS_BATCH_NUMBER_PRESENT.toString(), Integer.class, new Object[] { BatchNumber, userId});
 		return count>0;
 	}
+	
+	// ...existing code...
+	@Override
+	public void reduceProductStock(String batchNumber, long userId, int quantity, long storeId) {
+	    String sql = "UPDATE medical_store.pharmacy_product_details SET strip_count = strip_count - ? WHERE batch_number = ? AND user_id = ? AND store_id = ?";
+	    jdbcTemplate.update(sql, quantity, batchNumber, userId, storeId);
+	}
+	// ...existing code...
+	
+	@Override
+	public int getProductStock(String batchNumber, long userId) {
+	    String sql = "SELECT strip_count FROM medical_store.pharmacy_product_details WHERE batch_number = ? AND user_id = ?";
+	    Integer count = jdbcTemplate.queryForObject(sql, Integer.class, new Object[]{batchNumber, userId});
+	    return count != null ? count : 0;
+	}
+	
+	@Override
+	public List<Map<String, Object>> findExpiredProducts(long userId, long storeId, String date) {
+	    String sql = "SELECT * FROM medical_store.pharmacy_product_details WHERE user_id = ? AND store_id = ? AND expiry_date < CAST(? AS DATE)";
+	    return jdbcTemplate.queryForList(sql, userId, storeId, date);
+	}
 
 }

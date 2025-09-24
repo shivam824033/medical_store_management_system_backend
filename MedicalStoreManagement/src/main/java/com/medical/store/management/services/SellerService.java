@@ -5,10 +5,12 @@ package com.medical.store.management.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.medical.store.management.dao.SellerDAO;
 import com.medical.store.management.model.MasterProduct;
@@ -105,5 +107,56 @@ public class SellerService {
 			return res;
 		}
 	}
+	
+	  @Transactional
+	    public ResponseDTO finalizeBill(List<Map<String, Object>> billItems, UserInfo user) {
+	        ResponseDTO res = new ResponseDTO();
+	        try {
+	            Long storeId = null;
+	            for (Map<String, Object> item : billItems) {
+	                String batchNumber = (String) item.get("batchNumber");
+	                Integer quantity = (Integer) item.get("quantity");
+	                long itemStoreId = ((Number) item.get("storeId")).longValue();
+	                long itemUserId = ((Number) item.get("userId")).longValue();
+
+	                // Validation: All items must belong to the same store and user
+	                if (storeId == null) storeId = itemStoreId;
+	                if (storeId!=itemStoreId || user.getUserId() != itemUserId) {
+	                    throw new RuntimeException("All products must belong to the same store and user.");
+	                }
+
+	                // Validation: Check stock
+	                int available = sellerDAO.getProductStock(batchNumber, itemUserId);
+	                if (available < quantity) {
+	                    throw new RuntimeException("Insufficient stock for batch " + batchNumber + ". Available: " + available);
+	                }
+	            }
+
+	            // If all validations pass, update stock
+	            try {
+		            for (Map<String, Object> item : billItems) {
+		                String batchNumber = (String) item.get("batchNumber");
+		                Integer quantity = (Integer) item.get("quantity");
+		                Long itemUserId = ((Number) item.get("userId")).longValue();
+		                sellerDAO.reduceProductStock(batchNumber, user.getUserId(), quantity, user.getStoreId());
+		            }
+				} catch (Exception e) {
+					 throw new RuntimeException("Error Occurred while updating product details");
+				}
+
+
+	            res.setResponse("Bill finalized and stock updated successfully!");
+	            res.setStatusCode(200);
+	        } catch (Exception e) {
+	            // Transaction will rollback automatically on exception
+	            res.setErrorMessage("Failed to finalize bill: " + e.getMessage());
+	            res.setStatusCode(400);
+	        }
+	        return res;
+	    }
+	  
+	  public List<Map<String, Object>> getExpiredProducts(UserInfo user, String date) {
+		    return sellerDAO.findExpiredProducts(user.getUserId(), user.getStoreId(), date);
+		}
 
 }
