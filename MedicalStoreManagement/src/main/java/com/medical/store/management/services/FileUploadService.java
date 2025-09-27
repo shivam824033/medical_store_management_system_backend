@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Shivam jaiswal
@@ -66,6 +67,11 @@ public class FileUploadService {
             Path tempFile = Files.createTempFile(null, null); // Creates a temp file with a unique name
             file.transferTo(tempFile.toFile());
             List<Map<String, Object>> dataList = readExcel(tempFile.toFile(), requiredColumns);
+            
+            dataList = dataList.stream()
+                .filter(map -> map.get("BatchNo") != null && !map.get("BatchNo").toString().trim().isEmpty())
+                .collect(Collectors.toList());
+            
             insertProductList(dataList);
             
         } catch (Exception e) {
@@ -85,7 +91,7 @@ public class FileUploadService {
         	
         	product.setBatchNumber((String) data.get("BatchNo"));
         	product.setProductDescription((String) data.get("ProductDesc"));
-        	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+        	SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         	product.setProductExpiryDate(formatter.parse(data.get("ExpDate").toString()));
         	product.setProductName((String) data.get("ProductDesc"));
         	product.setProductPerPrice(Double.parseDouble(data.get("MRP").toString()));

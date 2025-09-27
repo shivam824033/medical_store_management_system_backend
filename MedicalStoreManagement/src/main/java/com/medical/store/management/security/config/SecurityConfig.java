@@ -60,6 +60,7 @@ public class SecurityConfig {
                 req.requestMatchers("/api/auth/**", "/api/public/**", "/h2/**").permitAll()
                 .requestMatchers("/api/owner/**").hasAuthority("OWNER")
                 .requestMatchers("/api/seller/**").hasAuthority("SELLER")
+                .requestMatchers("/api/invoice/**").hasAuthority("SELLER")
                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
@@ -80,7 +81,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                    .allowedOrigins("http://localhost:4200")
+                    .allowedOrigins("http://angular-project-web1.s3-website.ap-south-1.amazonaws.com,http://stocklyte.ap-south-1.elasticbeanstalk.com,http://localhost:4200")
                     .allowedMethods("GET", "POST", "PUT", "DELETE")
                     .allowCredentials(true);
             }
