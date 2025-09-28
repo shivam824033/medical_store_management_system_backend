@@ -45,6 +45,8 @@ public class UserDetailsDTO {
 	private String secretKey;
 
 	private String accountStatus;
+	
+	private String otp;
 
 	public long getUserId() {
 		return userId;
@@ -196,6 +198,14 @@ public class UserDetailsDTO {
 
 	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
 	}
 
 

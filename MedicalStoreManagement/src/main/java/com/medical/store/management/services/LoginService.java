@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -49,6 +50,12 @@ public class LoginService {
 
 	@Autowired
 	private SecretKeyService keyService;
+	
+    @Autowired
+    private OtpService otpService;
+    
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public LoginResponse getLogin(LoginRequest request) {
 
@@ -127,6 +134,15 @@ public class LoginService {
 		LoginResponse res = new LoginResponse();
 
 		try {
+			
+			boolean isValid = true; // otpService.validateOtp(userDetails.getEmail(), userDetails.getOtp());
+
+			if(!isValid) {
+				res.setErrorMessage("Invalid or expired OTP!");
+				res.setStatusCode(403);
+				return res;
+			}
+			
 			UserInfo userInfo = new UserInfo();
 			 userInfo = userDetailsDAO.findByUserName(userDetails.getUsername());
 			if(userInfo.getUsername() !=null && userInfo.getUsername()!="") {
@@ -142,7 +158,8 @@ public class LoginService {
 				return res;
 			}
 			if (keyService.validSecretKey(userDetails)) {
-				
+				userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+                userDetails.setAccountStatus("ACTIVE");
 				int count = userDetailsDAO.registerUserDetails(userDetails);
 				if(count>0) {
 					var jwtToken = jwtUtil.GenerateToken(userDetails.getUsername());

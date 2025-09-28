@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.medical.store.management.dao.UserDetailsDAO;
+import com.medical.store.management.exception.handler.UnauthorizedException;
 import com.medical.store.management.model.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -45,6 +46,10 @@ public class JwtTokenUtility {
 		
 		String jwtToken = jwtHeader.substring(7);
 		String username = extractUsername(jwtToken);
+		
+		if(!userDetailsDAO.isAcountActive(username)) {
+			throw new UnauthorizedException("You are not Authorized;");
+		}
 		
 		return userDetailsDAO.findByUserName(username);
 	}

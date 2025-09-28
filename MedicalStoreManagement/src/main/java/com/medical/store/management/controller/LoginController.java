@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medical.store.management.dao.UserDetailsDAO;
+import com.medical.store.management.exception.handler.UnauthorizedException;
 import com.medical.store.management.model.LoginRequest;
 import com.medical.store.management.model.UserDetailsDTO;
 import com.medical.store.management.model.UserInfo;
@@ -27,23 +29,24 @@ import com.medical.store.management.services.LoginService;
 public class LoginController {
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private LoginService loginService;
 	
 	@Autowired
-	private LoginService loginService;
+	private UserDetailsDAO userDetailsDAO;
 	
 	@PostMapping("/login")
 	public Object AuthenticateAndGetToken(@RequestBody LoginRequest loginRequest){
 	    	
+		if(!userDetailsDAO.isAcountActive(loginRequest.getUsername())) {
+			throw new UnauthorizedException("You are not Authorized;");
+		}
 	    return  loginService.getLogin(loginRequest);   
 
 	}
 	
 	@PostMapping("/signUp")
 	public Object signUp(@RequestBody UserDetailsDTO userInfo) {
-		
-		userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-		
+			
 		return loginService.registerNewUser(userInfo);
 	}
 	
