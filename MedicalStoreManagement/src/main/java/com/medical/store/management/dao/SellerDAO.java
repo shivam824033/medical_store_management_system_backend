@@ -10,7 +10,7 @@ public interface SellerDAO {
 	
 	public int addProductDetails(PharmacyMasterProduct productDetails);
 	
-	public List<PharmacyMasterProduct> findAllSellerProduct(int storeId,  String searchKeyword);
+	public List<PharmacyMasterProduct> findAllSellerProduct(long storeId,  String searchKeyword);
 
 	public List<MasterProduct> getMasterProduct(String searchKeyword);
 	

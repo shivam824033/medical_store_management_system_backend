@@ -21,6 +21,14 @@ public class BasicUtil {
 		return 0;
 	}
 	
+	public static final long getResultLong(Object string) {	
+		if(null!=string) {
+			long res = Long.parseLong(string.toString());
+			return res;
+		}		
+		return 0;
+	}
+	
 	public static final Double getResultDouble(Object string) {	
 		if(null!=string) {
 			Double res = Double.parseDouble(string.toString());

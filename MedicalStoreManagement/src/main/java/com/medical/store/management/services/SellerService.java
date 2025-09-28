@@ -78,7 +78,7 @@ public class SellerService {
 		return res;
 	}
 
-	public ResponseDTO findAllSellerProduct(int storeId, String searchKeyword) {
+	public ResponseDTO findAllSellerProduct(long storeId, String searchKeyword) {
 		ResponseDTO res = new ResponseDTO();
 
 		try {

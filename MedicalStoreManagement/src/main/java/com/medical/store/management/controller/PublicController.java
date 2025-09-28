@@ -25,7 +25,7 @@ public class PublicController {
 
 	
 	@GetMapping("/getSellerProduct")
-	public Object findSellerProduct(@RequestParam("storeId") int storeId,
+	public Object findSellerProduct(@RequestParam("storeId") long storeId,
 			@RequestParam("keyword") String searchKeyword) {
 
 		

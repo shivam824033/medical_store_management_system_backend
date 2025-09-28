@@ -154,7 +154,7 @@ public class SellerDAOImpl implements SellerDAO {
 
 
 	@Override
-	public List<PharmacyMasterProduct> findAllSellerProduct(int storeId, String searchKeyword) {
+	public List<PharmacyMasterProduct> findAllSellerProduct(long storeId, String searchKeyword) {
 		List<PharmacyMasterProduct> productList = new ArrayList<>();
 
 		searchKeyword = "%" + searchKeyword + "%";

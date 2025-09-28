@@ -56,7 +56,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 		        user.setFullName(BasicUtil.getResultString(result.get("fullname")));
 		        user.setGender(BasicUtil.getResultString(result.get("gender")));
 				user.setRoles(BasicUtil.getResultString(result.get("roles")));
-				user.setStoreId(BasicUtil.getResultInteger(result.get("store_id")));
+				user.setStoreId(BasicUtil.getResultLong(result.get("store_id")));
 				user.setStoreName(BasicUtil.getResultString(result.get("store_name")));
 				user.setAddress1(BasicUtil.getResultString(result.get("address_line1")));
 				user.setAddress2(BasicUtil.getResultString(result.get("address_line2")));
@@ -88,7 +88,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 		        user.setFullName(BasicUtil.getResultString(result.get("fullname")));
 		        user.setGender(BasicUtil.getResultString(result.get("gender")));
 				user.setRoles(BasicUtil.getResultString(result.get("roles")));
-				user.setStoreId(BasicUtil.getResultInteger(result.get("store_id")));
+				user.setStoreId(BasicUtil.getResultLong(result.get("store_id")));
 				user.setStoreName(BasicUtil.getResultString(result.get("store_name")));
 				user.setAddress1(BasicUtil.getResultString(result.get("address_line1")));
 				user.setAddress2(BasicUtil.getResultString(result.get("address_line2")));
@@ -109,8 +109,8 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
 		
 		if(userDeatils.getRoles().equalsIgnoreCase("SELLER")) {
-			String storeid = String.valueOf(userDeatils.getUserId()) + String.valueOf(userDeatils.getPincode());
-			userDeatils.setStoreId(Long.parseLong(storeid));
+			long storeId = jdbcTemplate.queryForObject("select nextval('medical_store.store_id_seq')", Long.class);
+			userDeatils.setStoreId(storeId);
 		}
 
 		int count = jdbcTemplate.update(UserDetailsQueryConstants.INSERT_USERDETAILS.toString(),
