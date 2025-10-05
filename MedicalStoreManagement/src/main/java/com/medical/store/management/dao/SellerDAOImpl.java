@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
 import com.medical.store.management.model.MasterProduct;
@@ -38,6 +39,7 @@ public class SellerDAOImpl implements SellerDAO {
 	}
 	
 	@Override
+	@Async
 	public void saveProductFromFile(List<PharmacyMasterProduct> productDetailsList) {
 	    String sql = """
 	        INSERT INTO medical_store.pharmacy_product_details (

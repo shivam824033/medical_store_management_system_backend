@@ -159,4 +159,9 @@ public class SellerService {
 		    return sellerDAO.findExpiredProducts(user.getUserId(), user.getStoreId(), date);
 		}
 
+	public Object findById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

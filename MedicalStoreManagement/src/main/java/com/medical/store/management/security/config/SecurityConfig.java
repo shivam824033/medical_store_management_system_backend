@@ -22,10 +22,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+import java.util.List;
 
 import com.medical.store.management.services.UserDetailsServiceImpl;
 
@@ -81,12 +86,25 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                    .allowedOrigins("http://angular-project-web1.s3-website.ap-south-1.amazonaws.com,http://stocklyte.ap-south-1.elasticbeanstalk.com,http://localhost:4200")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE")
+                    .allowedOrigins("http://localhost:4200/","http://angular-project-web1.s3-website.ap-south-1.amazonaws.com,http://stocklyte.ap-south-1.elasticbeanstalk.com,http://localhost:4200")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowCredentials(true);
             }
         };
     }
+    
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(List.of("*"));
+//        configuration.setAllowCredentials(false);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
