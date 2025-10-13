@@ -21,7 +21,7 @@ public class OtpController {
 		ResponseDTO res = new ResponseDTO();
 
 		try {
-//	        otpService.generateOtp(email);
+	        otpService.generateOtp(email);
 	        res.setResponse("OTP sent successfully!");
 	        res.setStatusCode(200);
 	        
