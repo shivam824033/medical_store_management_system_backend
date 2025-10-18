@@ -14,11 +14,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.medical.store.management.exception.handler.UnauthorizedException;
 import com.medical.store.management.services.UserDetailsServiceImpl;
 import com.medical.store.management.token.Token;
 //import com.medical.store.management.token.TokenRepository;
 import com.medical.store.management.token.TokenDAO;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -83,8 +85,12 @@ public class JwtAuthFilter extends OncePerRequestFilter  {
               filterChain.doFilter(request, response);
         	
 			
+		} catch (ExpiredJwtException e) {
+		  	response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		  	response.setContentType("application/json");
+		  	response.getWriter().write("{\"message\": \"session expired\"}");
 		} catch (Exception e) {
-			response.sendError(403, "You are not Authorized");
+			response.sendError(401, "You are not Authorized");
 		}
 
     }

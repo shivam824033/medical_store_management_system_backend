@@ -60,7 +60,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable).headers().frameOptions().disable().and()
+        return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> 
                 req.requestMatchers("/api/auth/**","/api/otp/**", "/api/public/**", "/h2/**").permitAll()
                 .requestMatchers("/api/owner/**").hasAuthority("OWNER")
