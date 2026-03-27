@@ -160,6 +160,7 @@ public class LoginService {
 			if (keyService.validSecretKey(userDetails)) {
 				userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
                 userDetails.setAccountStatus("ACTIVE");
+                userDetails.setFullName(userDetails.getFirstName() + " " + userDetails.getLastName());
 				int count = userDetailsDAO.registerUserDetails(userDetails);
 				if(count>0) {
 					var jwtToken = jwtUtil.GenerateToken(userDetails.getUsername());
